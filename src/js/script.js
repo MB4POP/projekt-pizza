@@ -213,6 +213,24 @@
 
             /* END ELSE IF: if option is not selected and option is default */
           }
+
+          /*set selecton in vulnerable classPictures */
+          let classPictures = '.' + paramId + '-' + optionId;
+
+          /* put elements classPictures in thisProduct.imageWrapper and set vulnetable pictures for them */
+          let pictures = thisProduct.imageWrapper.querySelectorAll(classPictures);
+
+          if(optionSelected) {
+
+            for (let picture of pictures) {
+              picture.classList.add('active');
+            }
+          } else {
+            for (let picture of pictures) {
+              picture.classList.remove('active');
+            }
+          }
+
           /* END LOOP: for each optionId in param.options */
         }
         /* END LOOP: for each paramId in thisProduct.data.params */

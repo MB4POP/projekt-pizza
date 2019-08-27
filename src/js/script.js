@@ -6,6 +6,7 @@
   const select = {
     templateOf: {
       menuProduct: '#template-menu-product',
+      cartProduct: '#template-cart-product',
     },
     containerOf: {
       menu: '#product-list',
@@ -26,10 +27,29 @@
     },
     widgets: {
       amount: {
-        input: 'input[name="amount"]',
+        input: 'input.amount',
         linkDecrease: 'a[href="#less"]',
         linkIncrease: 'a[href="#more"]',
       },
+    },
+
+    cart: {
+      productList: '.cart__order-summary',
+      toggleTrigger: '.cart__summary',
+      totalNumber: `.cart__total-number`,
+      totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
+      subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
+      deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
+      form: '.cart__order',
+      formSubmit: '.cart__order [type="submit"]',
+      phone: '[name="phone"]',
+      address: '[name="address"]',
+    },
+    cartProduct: {
+      amountWidget: '.widget-amount',
+      price: '.cart__product-price',
+      edit: '[href="#edit"]',
+      remove: '[href="#remove"]',
     },
   };
 
@@ -38,6 +58,10 @@
       wrapperActive: 'active',
       imageVisible: 'active',
     },
+
+    cart: {
+      wrapperActive: 'active',
+    },
   };
 
   const settings = {
@@ -45,11 +69,16 @@
       defaultValue: 1,
       defaultMin: 1,
       defaultMax: 9,
-    }
+    },
+
+    cart: {
+      defaultDeliveryFee: 20,
+    },
   };
 
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
+    cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
   };
 
   class Product {
@@ -250,7 +279,7 @@
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
-      thisProduct.amountWidgetElem.addEventListener('updated', function(event) {
+      thisProduct.amountWidgetElem.addEventListener('updated', function() {
         thisProduct.processOrder();
       });
     }
@@ -267,7 +296,7 @@
       thisWidget.initActions();
     }
 
-    getElements(element){
+    getElements(element) {
       const thisWidget = this;
 
       thisWidget.element = element;
@@ -281,7 +310,7 @@
       const newValue = parseInt(value);
 
       if(newValue != thisWidget.value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
-       thisWidget.value = newValue;
+        thisWidget.value = newValue;
         thisWidget.announce();
       }
       thisWidget.input.value = thisWidget.value;
@@ -291,7 +320,7 @@
 
       const thisWidget = this;
 
-      thisWidget.input.addEventListener('change', function (event) {
+      thisWidget.input.addEventListener('change', function () {
         thisWidget.setValue(thisWidget.input.value);
       });
 
@@ -316,6 +345,36 @@
 
   }
 
+  class Cart {
+    constructor(element) {
+      const thisCart = this;
+
+      thisCart.products = [];
+
+      thisCart.getElements(element);
+      thisCart.initActions();
+
+    }
+
+    getElements(element) {
+      const thisCart = this;
+
+      thisCart.dom = {};
+
+      thisCart.dom.wrapper = element;
+
+      thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+    }
+
+    initActions() {
+      const thisCart = this;
+
+      thisCart.dom.toggleTrigger.addEventListener('click', function() {
+        thisCart.dom.wrapper.classList.toggle('active');
+      });
+    }
+  }
+
   const app = {
     initMenu: function() {
       const thisApp = this;
@@ -331,15 +390,25 @@
       thisApp.data = dataSource;
     },
 
+    initCart: function() {
+      const thisApp = this;
+
+      const cartElem = document.querySelector(select.containerOf.cart);
+      thisApp.cart = new Cart(cartElem);
+    },
+
     init: function(){
       const thisApp = this;
 
       thisApp.initData();
       thisApp.initMenu();
+      thisApp.initCart();
     },
+
   };
 
   app.init();
+
 }
 
 

@@ -54,7 +54,7 @@
     },
   };
 
-  /*const classNames = {
+  const classNames = {
     menuProduct: {
       wrapperActive: 'active',
       imageVisible: 'active',
@@ -63,7 +63,7 @@
     cart: {
       wrapperActive: 'active',
     },
-  };*/
+  };
 
   const settings = {
     amountWidget: {
@@ -449,7 +449,6 @@
 
       for(let product of thisCart.products) {
         payload.products.push(product.getData());
-        console.log('product', product);
       }
 
       const options = {
@@ -656,6 +655,5 @@
   };
 
   app.init();
-
 
 }

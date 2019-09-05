@@ -1,6 +1,7 @@
-import {settings, select, templates} from './settings.js';
-import CartProduct from './components/CartProduct.js';
-import utils from './utils.js';
+import {settings, select, templates, classNames} from '../settings.js';
+import CartProduct from './CartProduct.js';
+import {utils} from '../utils.js';
+
 
 class Cart {
   constructor(element) {
@@ -39,7 +40,7 @@ class Cart {
     const thisCart = this;
 
     thisCart.dom.toggleTrigger.addEventListener('click', function() {
-      thisCart.dom.wrapper.classList.toggle('active');
+      thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
     });
 
     thisCart.dom.productList.addEventListener('updated', function() {

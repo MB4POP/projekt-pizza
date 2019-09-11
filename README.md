@@ -1,4 +1,4 @@
 # projekt-pizza
 
-https://mb4pop.github.io/projekt-pizza/.
+https://dazzling-jackson-24643a.netlify.com/#/booking
 

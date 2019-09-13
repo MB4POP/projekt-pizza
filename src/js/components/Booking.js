@@ -11,6 +11,64 @@ class Booking {
     thisBooking.render(element);
     thisBooking.initWidget();
     thisBooking.getData();
+    thisBooking.initActions();
+  }
+
+  initActions() {
+    const thisBooking = this;
+
+    let bookedTable = [];
+
+    /* choose one avaiable table - mark it when clicked*/
+    for (let table of thisBooking.dom.tables) {
+      table.addEventListener('click', function() {
+        table.classList.add(classNames.booking.tableBooked);
+        bookedTable = table.getAttribute(settings.booking.tableIdAttribute);
+        thisBooking.table = bookedTable;
+      });
+    }
+    /* remove option table when change hour or date*/
+    thisBooking.hourPicker.dom.input.addEventListener('input', function() {
+      if (bookedTable.length > 0) {
+        thisBooking.dom.tables[bookedTable-1].classList.remove(classNames.booking.tableBooked);
+      }
+    });
+
+    thisBooking.datePicker.dom.input.addEventListener('input', function() {
+      if (bookedTable.length > 0) {
+        thisBooking.dom.tables[bookedTable-1].classList.remove(classNames.booking.tableBooked);
+      }
+    });
+  }
+
+  /* send order to API and unable to order the same table in the same time*/
+  sendBooking() {
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.booking;
+
+    const payload = {
+      date: thisBooking.datePicker.correctValue,
+      hour: thisBooking.hourPicker.correctValue,
+      duration: thisBooking.hoursAmount.correctValue,
+      ppl: thisBooking.peopleAmount.correctValue,
+      table: parseInt(thisBooking.table),
+      repeat: false,
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(url, options)
+      .then(function(response){
+        return response.json();
+      }).then(function(parsedResponse){
+        console.log('parsedResponse', parsedResponse);
+      });
   }
 
   getData() {
@@ -136,7 +194,7 @@ class Booking {
       ) {
         table.classList.add(classNames.booking.tableBooked);
       } else {
-        table.classList.remove(classNames.booking.tableBooked)
+        table.classList.remove(classNames.booking.tableBooked);
       }
     }
   }

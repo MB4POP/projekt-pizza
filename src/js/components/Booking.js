@@ -39,8 +39,9 @@ class Booking {
     });
 
     thisBooking.dom.bookButton.addEventListener('submit', function() {
-      thisBooking.sendBooking();
       event.preventDefault();
+      thisBooking.sendBooking();
+      thisBooking.getData();
     });
   }
   sendBooking() {
@@ -213,6 +214,7 @@ class Booking {
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
     thisBooking.dom.bookButton = thisBooking.dom.wrapper.querySelector(select.booking.form);
   }
+
   initWidgets() {
     const thisBooking = this;
 

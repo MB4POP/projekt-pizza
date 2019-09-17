@@ -40,8 +40,10 @@ class Booking {
 
     thisBooking.dom.bookButton.addEventListener('submit', function() {
       event.preventDefault();
-      thisBooking.sendBooking();
-      thisBooking.getData();
+      thisBooking.sendBooking()
+        .then(function() {
+          thisBooking.getData();
+        });
     });
   }
   sendBooking() {
@@ -66,7 +68,8 @@ class Booking {
       body: JSON.stringify(payload),
     };
 
-    fetch(url, options)
+    fetch(url, options);
+    return fetch(url, options)
       .then(function(response){
         return response.json();
       });

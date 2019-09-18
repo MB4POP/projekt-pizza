@@ -46,6 +46,7 @@ class Booking {
         });
     });
   }
+
   sendBooking() {
     const thisBooking = this;
     const url = settings.db.url + '/' + settings.db.booking;
@@ -68,8 +69,7 @@ class Booking {
       body: JSON.stringify(payload),
     };
 
-    fetch(url, options);
-    return fetch(url, options)
+    fetch(url, options)
       .then(function(response){
         return response.json();
       });
